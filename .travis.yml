@@ -19,11 +19,11 @@ after_success:
   - docker build -t yauhenisheima/multi-worker ./worker 
   # Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those images and push them to docker hub
   - docker push yauhenisheima/multi-client
   - docker push yauhenisheima/multi-nginx
   - docker push yauhenisheima/multi-server 
   - docker push yauhenisheima/multi-worker
-  # Take those images and push them to docker hub
 # deploy:
 #   # Use this set of instractions:
 #   provider: elasticbeanstalk
