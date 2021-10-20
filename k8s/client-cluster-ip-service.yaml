@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: client-cluster-ip-service
+spec:
+  type: ClusterIP
+  selector:
+    # That's how client-pod is linked to the client-node-port. The key/value can be anything: key: value
+    component: web
+  ports:
+    - port: 3000
+      targetPort: 3000
