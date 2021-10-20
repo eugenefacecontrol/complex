@@ -1,12 +1,20 @@
+# Specify a scope of objects we can create:
+# v1: componentStatus, configMap, Endpoints, Event, Namespace, Pod etc.
+# apps/v1: ControllerRevision, StatefulSet, Development
 apiVersion: apps/v1
+# There are several types of created objects: StatefulSet, ReplicaController, Pod - running one container or more, Service - setting up networking, Deployment - maintains a set of identical pods, ensuring that they have the correct config and that the right number exists.
 kind: Deployment
 metadata:
   name: postgres-deployment
 spec:
+  # Namber of identical pods to make:
   replicas: 1
+  # We use selector, because we reaching to the kube api and ask master to create a Pod object
   selector:
     matchLabels:
+      # That's how postgres-pod is linked to the postgres-node-port. The key/value can be anything: key: value
       component: postgres
+  # All the created Pods need to be of the exact format (identical):
   template:
     metadata:
       labels:
