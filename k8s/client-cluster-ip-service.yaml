@@ -1,12 +1,19 @@
+# Specify a scope of objects we can create:
+# v1: componentStatus, configMap, Endpoints, Event, Namespace, Pod etc.
+# apps/v1: ControllerRevision, StatefulSet
 apiVersion: v1
+# There are several types of created objects: StatefulSet, ReplicaController, Pod - running one container or more, Service - setting up networking, Deployment - maintains a set of identical pods, ensuring that they have the correct config and that the right number exists.
 kind: Service
 metadata:
   name: client-cluster-ip-service
 spec:
+  # Service has 4 sub-types: ClusterIP (Exposes a set of pods to other objects in the cluster), NodePort (Exposes a container to the outside world), LoadBalancer and Ingress
   type: ClusterIP
   selector:
     # That's how client-pod is linked to the client-node-port. The key/value can be anything: key: value
     component: web
   ports:
+    # Other pod, that needs access to the current one can access via this port
     - port: 3000
+    # We want to send any incoming trafic into port 3000 inside this pod. And the port 3000 is mapped to the multi-client container in the client-pod.yaml.
       targetPort: 3000
