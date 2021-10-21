@@ -30,3 +30,10 @@ spec:
           image: postgres
           ports:
             - containerPort: 5432
+          # Return to the spec > volumes > name and find storage with the following names and use specified storage
+          volumeMounts:
+            - name: postgres-storage
+              # What we want to save to the persistent volume. Default path to the postgres data:
+              mountPath: /var/lib/postgresql/data
+              # It will be stored in the following folder in the persistent volume. For postgres it's necessary
+              subPath: postgres
