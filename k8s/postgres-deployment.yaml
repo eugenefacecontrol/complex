@@ -37,3 +37,9 @@ spec:
               mountPath: /var/lib/postgresql/data
               # It will be stored in the following folder in the persistent volume. For postgres it's necessary
               subPath: postgres
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pgpassword
+                  key: PGPASSWORD

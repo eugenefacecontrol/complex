@@ -29,10 +29,10 @@ spec:
           env:
             - name: REDIS_HOST
               # name in redis-cluster-ip-service.yaml
-              value: redis-cluster-ip-service.yaml
+              value: redis-cluster-ip-service
             - name: REDIS_PORT
               # port in redis-cluster-ip-service.yaml
-              value: 6379
+              value: '6379'
             - name: PGUSER
               value: postgres
             - name: PGHOST
@@ -40,6 +40,14 @@ spec:
               value: postgres-cluster-ip-service
             - name: PGPORT
               # port in postgres-cluster-ip-service.yaml
-              value: 5432
+              value: '5432'
             - name: PGDATABASE
               value: postgres
+            # Environment variable set in via kubctl create secret command
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  # Name of the created secret
+                  name: pgpassword
+                  # We could set many key-values, so we write the key for the password
+                  key: PGPASSWORD

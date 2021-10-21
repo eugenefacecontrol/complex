@@ -29,4 +29,4 @@ spec:
               value: redis-cluster-ip-service
             - name: REDIS_PORT
               # port in redis-cluster-ip-service.yaml
-              value: 6379
+              value: '6379'
