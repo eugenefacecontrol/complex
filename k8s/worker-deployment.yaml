@@ -23,3 +23,10 @@ spec:
       containers:
         - name: worker
           image: yauhenisheima/multi-worker
+          env:
+            - name: REDIS_HOST
+              # name in redis-cluster-ip-service.yaml
+              value: redis-cluster-ip-service
+            - name: REDIS_PORT
+              # port in redis-cluster-ip-service.yaml
+              value: 6379

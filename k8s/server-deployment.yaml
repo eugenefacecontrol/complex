@@ -26,3 +26,20 @@ spec:
           ports:
           # complex > server > nginx > default.conf > listen 5000
             - containerPort: 5000
+          env:
+            - name: REDIS_HOST
+              # name in redis-cluster-ip-service.yaml
+              value: redis-cluster-ip-service.yaml
+            - name: REDIS_PORT
+              # port in redis-cluster-ip-service.yaml
+              value: 6379
+            - name: PGUSER
+              value: postgres
+            - name: PGHOST
+              # name in postgres-cluster-ip-service.yaml
+              value: postgres-cluster-ip-service
+            - name: PGPORT
+              # port in postgres-cluster-ip-service.yaml
+              value: 5432
+            - name: PGDATABASE
+              value: postgres
