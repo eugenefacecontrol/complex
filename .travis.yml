@@ -1,0 +1,61 @@
+language: generic
+# We need super user permissions
+sudo: required
+# We need a copy of a docker
+services:
+  - docker
+env:
+  global:
+    # Set variable for building the containers with dynamic id. Is used in the deploy.sh file
+    - SHA=$(git rev-parse HEAD)
+    # Disable google cloud cli prompts
+    - CLOUDSDK_CORE_DISABLE_PROMPTS=1
+before_install:
+  # Command to run for encrypted Google Cloud Service Account credentials
+  - openssl aes-256-cbc -K $encrypted_9f3b5599b056_key -iv $encrypted_9f3b5599b056_iv -in service-account.json.enc -out service-account.json -d
+  # Download Google Cloud SDK
+  - curl https://sdk.cloud.google.com | bash > /dev/null;
+  # Look at the default install directory of google cloud sdk and apply the path.bash.inc via source command
+  - source $HOME/google-cloud-sdk/path.bash.inc
+  # Install kubectl inside our travis environment
+  - gcloud components update kubectl
+  # Activate the account via activate-service-account and provide set of credentials via service-account.json
+  - gcloud auth activate-service-account --key-file service-account.json
+  # Project Id on Google Cloud
+  - gcloud config set project multi-k8s-329811
+  # Location of your kubernetes cluster
+  - gcloud config set compute/zone europe-west3-a
+  # Name of your kubernetes cluster
+  - gcloud container clusters get-credentials multi-cluster
+  # Login into the docker CLI. They are entered inside the Travis variables
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Temporary tag
+  - docker build -t yauhenisheima/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true eugenefacecontrol/react-test npm run test
+
+deploy:
+  provider: script
+  script: bash ./deploy.sh
+  on:
+    branch: master
+# deploy:
+#   # Use this set of instractions:
+#   provider: elasticbeanstalk
+#   # Where exactly you created you beanstack instance. URL from dashboard: <environment name>.<some random characters>.<your region>.elasticbeanstalk.com
+#   region: "<your region>"
+#   # Dashboard: All applications > <app name> > <environment name>
+#   app: "<app name>"
+#   # Dashboard: All applications > <app name> > <environment name>
+#   env: "<environment name>"
+#   # Name of the bucket that Travis will put generated zip file into. Services -> S3 (Scalable storage in the Cloud) -> elasticbeanstalk-<your region>-<some random nambers>
+#   bucket_name: "elasticbeanstalk-<your region>-<some random nambers>"
+#   # Inside the bucket. By default, backet path equals <app name>
+#   bucket_path: "<app name>"
+#   #  Condition: Only attempt to deploy application, when the master branch gets a new code 
+#   on:
+#     branch: master
+#   # Search for IAM (Manage User Access and Encryption Keys) -> Users section -> Add user -> Provide a user name -> Access type: Programmatic access and AWS Management Console access -> Attach existing policies directly -> Search beanstalk -> Check "Provides full access" -> Next: Review -> Create user -> Copy access key id secret access key to Travis CI
+#   access_key_id: $AWS_ACCESS_KEY
+#   secret_access_key: $AWS_SECRET_KEY
