@@ -32,30 +32,11 @@ before_install:
   # Temporary tag
   - docker build -t yauhenisheima/react-test -f ./client/Dockerfile.dev ./client
 
-# script:
-  # - docker run -e CI=true eugenefacecontrol/react-test npm run test
+script:
+  - docker run -e CI=true yauhenisheima/react-test npm run test
 
 deploy:
   provider: script
   script: bash ./deploy.sh
   on:
     branch: master
-# deploy:
-#   # Use this set of instractions:
-#   provider: elasticbeanstalk
-#   # Where exactly you created you beanstack instance. URL from dashboard: <environment name>.<some random characters>.<your region>.elasticbeanstalk.com
-#   region: "<your region>"
-#   # Dashboard: All applications > <app name> > <environment name>
-#   app: "<app name>"
-#   # Dashboard: All applications > <app name> > <environment name>
-#   env: "<environment name>"
-#   # Name of the bucket that Travis will put generated zip file into. Services -> S3 (Scalable storage in the Cloud) -> elasticbeanstalk-<your region>-<some random nambers>
-#   bucket_name: "elasticbeanstalk-<your region>-<some random nambers>"
-#   # Inside the bucket. By default, backet path equals <app name>
-#   bucket_path: "<app name>"
-#   #  Condition: Only attempt to deploy application, when the master branch gets a new code 
-#   on:
-#     branch: master
-#   # Search for IAM (Manage User Access and Encryption Keys) -> Users section -> Add user -> Provide a user name -> Access type: Programmatic access and AWS Management Console access -> Attach existing policies directly -> Search beanstalk -> Check "Provides full access" -> Next: Review -> Create user -> Copy access key id secret access key to Travis CI
-#   access_key_id: $AWS_ACCESS_KEY
-#   secret_access_key: $AWS_SECRET_KEY
