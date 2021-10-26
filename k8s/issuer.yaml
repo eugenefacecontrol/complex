@@ -1,0 +1,14 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: ClusterIssuer
+metdata:
+  # Will be used for setting communication back and forth
+  name: letsencrypt-prod
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: 'eugenefacecontrol@gmail.com'
+    # THis is not a secret key, just some unimportand ref
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    # We want to reach out to the letsencrypt and request a certificate
+    http01: {}
