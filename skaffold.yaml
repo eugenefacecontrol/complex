@@ -1,5 +1,5 @@
 # version of the configuration.
-apiVersion: skaffold/v2beta12 	
+apiVersion: skaffold/v2beta12
 kind: Config
 # describes how images are built.
 build:
@@ -11,7 +11,7 @@ build:
     - image: yauhenisheima/multi-client
       context: client
       docker:
-        dockerFile: Dockerfile.dev
+        dockerfile: Dockerfile.dev
       sync:
         manual:
           # When you see any JS file change, just take that file into the container
@@ -24,4 +24,5 @@ build:
 deploy:
   kubectl:
     manifest:
-      - k8s/client-deployment.yaml
+    # All the services will be closed automatically with skaffold
+      - k8s/*
